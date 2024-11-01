@@ -6,6 +6,8 @@
     <title>{% block title %}Tech Store{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
@@ -13,22 +15,28 @@
 
 <!-- Barra de Navegación -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{{ url_for('index') }}">Tech Store</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('products') }}">Products</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('register') }}">Contact Us</a>
-            </li>
-        </ul>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('index') }}"><i class="fas fa-laptop-code"></i> Tech Store</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('products') }}"><i class="fas fa-box"></i> Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('register') }}"><i class="fas fa-envelope"></i> Contact Us</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0 ml-lg-3">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search products..." aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
     </div>
 </nav>
 
@@ -37,10 +45,65 @@
     {% block content %}{% endblock %}
 </div>
 
-<!-- Footer -->
-<footer class="bg-dark text-white text-center py-3 mt-5">
-    <p>© 2024 Tech Store - All rights reserved.</p>
+<!-- Footer Mejorado -->
+<footer class="bg-dark text-white pt-4 pb-3">
+    <div class="container text-center text-md-left">
+        <div class="row">
+            <!-- Información -->
+            <div class="col-md-3 mx-auto mb-3">
+                <h5 class="text-uppercase text-warning">Tech Store</h5>
+                <p>Tu tienda de tecnología en línea con productos de alta calidad y servicios excepcionales.</p>
+            </div>
+
+            <!-- Enlaces -->
+            <div class="col-md-2 mx-auto mb-3">
+                <h5 class="text-uppercase text-warning">Enlaces</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('index') }}" class="text-white">Inicio</a></li>
+                    <li><a href="{{ url_for('products') }}" class="text-white">Productos</a></li>
+                    <li><a href="{{ url_for('register') }}" class="text-white">Contacto</a></li>
+                </ul>
+            </div>
+
+            <!-- Redes Sociales -->
+            <div class="col-md-2 mx-auto mb-3">
+                <h5 class="text-uppercase text-warning">Síguenos</h5>
+                <div>
+                    <a href="#" class="text-white mr-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white mr-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white mr-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <!-- Contacto -->
+            <div class="col-md-3 mx-auto mb-3">
+                <h5 class="text-uppercase text-warning">Contacto</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-home"></i> Calle Ejemplo, 123, Ciudad</li>
+                    <li><i class="fas fa-envelope"></i> info@techstore.com</li>
+                    <li><i class="fas fa-phone"></i> + 01 234 567 88</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Derechos Reservados -->
+        <div class="row">
+            <div class="col-md-8 text-center text-md-left">
+                <p>© 2024 Tech Store - Todos los derechos reservados.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-right">
+                <button onclick="scrollToTop()" class="btn btn-outline-warning btn-sm"><i class="fas fa-arrow-up"></i> Volver Arriba</button>
+            </div>
+        </div>
+    </div>
 </footer>
+<!-- Scroll to Top Script -->
+<script>
+function scrollToTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
 
 <!-- Bootstrap JS, Popper.js, and jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

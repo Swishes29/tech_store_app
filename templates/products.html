@@ -1,23 +1,129 @@
 {% extends "base.html" %}
 {% block title %}Nuestros Productos - Tech Store{% endblock %}
 {% block content %}
+
+<!-- CDN de FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-yGFt9G4APV7EX2bJlI6z0GJ59KhTBdoql2vTt6Pj93Jt+yTR8Hv3Y04+fl8Ckp6C" crossorigin="anonymous">
+
 <h2 class="text-center my-4">Nuestros Productos</h2>
 <div class="row">
     {% for product in products %}
     <div class="col-md-4 mb-4 d-flex align-items-stretch">
-        <div class="card h-100 shadow-sm">
-            <!-- Imagen de Producto -->
-            <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+        <div class="card h-100 shadow-sm" style="min-width: 280px;">
+            <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover;">
 
             <div class="card-body d-flex flex-column">
                 <h5 class="card-title">{{ product.name }}</h5>
                 <p class="card-text">{{ product.description }}</p>
-                <p class="card-text"><strong>Precio:</strong> ${{ product.price }}</p>
-                <p class="card-text"><strong>Stock:</strong> {{ product.stock }}</p>
-                <a href="#" class="btn btn-primary mt-auto">Agregar al carrito</a>
+                <p class="card-text"><strong><i class="fas fa-tag"></i> Precio:</strong> ${{ product.price }}</p>
+                <button class="btn btn-primary mt-auto" onclick="addToCart('{{ product.name }}', {{ product.price }}, '{{ product.image_url }}')">
+                    <i class="fas fa-cart-plus"></i> Agregar al carrito
+                </button>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
+
+<!-- Carrito de Compras (Menú Lateral) -->
+<div id="cartSidebar" class="cart-sidebar"> <!-- El carrito no tiene clase "active" inicialmente -->
+    <div class="cart-header">
+        <h5><i class="fas fa-shopping-cart"></i> Tu Carrito (<span id="productCount">0</span> producto/s)</h5>
+        <button class="btn-close" onclick="closeCart()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="cart-items">
+        <!-- Aquí se añadirán los productos dinámicamente -->
+    </div>
+    <div class="cart-summary">
+        <p>Total Productos: $<span id="totalProducts">0.00</span></p>
+        <p>Total Descuentos: -$<span id="totalDiscounts">0.00</span></p>
+        <p class="subtotal"><strong>Subtotal: $<span id="subtotal">0.00</span></strong></p>
+        <button class="btn btn-success w-100" onclick="finalizePurchase()"><i class="fas fa-check-circle"></i> Continuar</button>
+    </div>
+</div>
+
+<script>
+// Variable global del carrito
+let cart = [];
+
+// Función para cerrar el carrito manualmente
+function closeCart() {
+    document.getElementById('cartSidebar').classList.remove('active');
+}
+
+// Función para agregar al carrito y abrir el menú lateral explícitamente
+function addToCart(name, price, imageUrl) {
+    // Verificar si el producto ya está en el carrito
+    const productIndex = cart.findIndex(item => item.name === name);
+    if (productIndex !== -1) {
+        // Incrementar la cantidad si ya existe
+        cart[productIndex].quantity += 1;
+    } else {
+        // Agregar nuevo producto si no existe
+        const product = { name, price, imageUrl, quantity: 1 };
+        cart.push(product);
+    }
+    updateCart();
+
+    // Forzar el carrito a abrirse explícitamente
+    document.getElementById('cartSidebar').classList.add('active');
+}
+
+// Función para actualizar el carrito y mostrar contenido
+function updateCart() {
+    const cartItems = document.querySelector('.cart-items');
+    cartItems.innerHTML = '';
+    let totalProducts = 0;
+    let subtotal = 0;
+
+    cart.forEach((product, index) => {
+        const productTotal = product.price * product.quantity;
+        subtotal += productTotal;
+        totalProducts += productTotal;
+
+        // Renderizar los elementos del carrito
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <img src="${product.imageUrl}" alt="${product.name}">
+                <div>
+                    <p><strong>${product.name}</strong></p>
+                    <p>
+                        <button onclick="updateQuantity(${index}, -1)" class="btn btn-link p-0"><i class="fas fa-minus-circle"></i></button>
+                        ${product.quantity}
+                        <button onclick="updateQuantity(${index}, 1)" class="btn btn-link p-0"><i class="fas fa-plus-circle"></i></button>
+                    </p>
+                    <p class="price">$${productTotal.toFixed(2)}</p>
+                </div>
+                <button onclick="removeFromCart(${index})" class="btn btn-link text-danger"><i class="fas fa-trash-alt"></i> Eliminar</button>
+            </div>
+        `;
+    });
+
+    // Actualizar contadores y subtotal
+    document.getElementById('productCount').textContent = cart.length;
+    document.getElementById('totalProducts').textContent = totalProducts.toFixed(2);
+    document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+}
+
+// Función para actualizar la cantidad de productos en el carrito
+function updateQuantity(index, amount) {
+    cart[index].quantity += amount;
+    if (cart[index].quantity <= 0) cart.splice(index, 1); // Eliminar si cantidad es cero
+    updateCart();
+}
+
+// Función para remover producto del carrito
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCart();
+}
+
+// Función para finalizar la compra
+function finalizePurchase() {
+    alert("¡Felicidades! Has realizado una compra exitosamente.");
+    cart = [];
+    updateCart();
+    closeCart();
+}
+</script>
 {% endblock %}

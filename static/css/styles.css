@@ -1,0 +1,147 @@
+/* Estilos del carrito lateral */
+.cart-sidebar {
+    position: fixed;
+    right: -100%;
+    top: 0;
+    width: 320px;
+    height: 100%;
+    background-color: #f8f9fa;
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    z-index: 1050;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+.cart-sidebar.active {
+    right: 0;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+.cart-items {
+    flex-grow: 1;
+    margin-top: 1rem;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 0.75rem;
+    border-radius: 6px;
+}
+
+.cart-item .price {
+    font-weight: bold;
+    color: #28a745;
+}
+
+.cart-summary {
+    border-top: 1px solid #ddd;
+    padding-top: 1rem;
+    font-size: 0.95rem;
+}
+
+.cart-summary p {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+}
+
+.subtotal {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+}
+
+.card {
+    transition: transform 0.2s ease;
+    border-radius: 10px;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.card-body p {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Ajustes en el footer */
+footer {
+    padding-top: 2rem; /* Ajusta la altura del padding superior */
+    padding-bottom: 2rem; /* Ajusta la altura del padding inferior */
+}
+
+footer h5 {
+    font-size: 1.1rem;
+}
+
+footer p, footer a {
+    font-size: 0.9rem; /* Reduce un poco el tamaño de fuente */
+}
+
+footer .btn {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.75rem;
+}
+
+/* Mejoras generales */
+.navbar-brand, .nav-link, .footer p, .footer a {
+    font-weight: 500; /* Añade algo de peso a las fuentes */
+}
+
+.footer p {
+    margin-bottom: 0.5rem;
+}
+
+.btn-outline-warning {
+    border-radius: 50px; /* Redondea los botones para un aspecto moderno */
+}
+
+.footer hr {
+    border-top: 1px solid #666; /* Ajusta el color de la línea de división */
+}
+.product-image {
+    width: 100%; /* Se ajusta al ancho de la tarjeta */
+    height: 200px; /* Altura fija para consistencia */
+    object-fit: cover; /* Ajuste de la imagen sin distorsión */
+}
