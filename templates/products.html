@@ -2,7 +2,6 @@
 {% block title %}Nuestros Productos - Tech Store{% endblock %}
 {% block content %}
 
-<!-- CDN de FontAwesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-yGFt9G4APV7EX2bJlI6z0GJ59KhTBdoql2vTt6Pj93Jt+yTR8Hv3Y04+fl8Ckp6C" crossorigin="anonymous">
 
 <h2 class="text-center my-4">Nuestros Productos</h2>
@@ -25,20 +24,43 @@
     {% endfor %}
 </div>
 
-<!-- Carrito de Compras (Menú Lateral) -->
-<div id="cartSidebar" class="cart-sidebar"> <!-- El carrito no tiene clase "active" inicialmente -->
+<!-- Sidebar del Carrito -->
+<div id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
         <h5><i class="fas fa-shopping-cart"></i> Tu Carrito (<span id="productCount">0</span> producto/s)</h5>
         <button class="btn-close" onclick="closeCart()"><i class="fas fa-times"></i></button>
     </div>
     <div class="cart-items">
-        <!-- Aquí se añadirán los productos dinámicamente -->
     </div>
     <div class="cart-summary">
         <p>Total Productos: $<span id="totalProducts">0.00</span></p>
         <p>Total Descuentos: -$<span id="totalDiscounts">0.00</span></p>
         <p class="subtotal"><strong>Subtotal: $<span id="subtotal">0.00</span></strong></p>
         <button class="btn btn-success w-100" onclick="finalizePurchase()"><i class="fas fa-check-circle"></i> Continuar</button>
+    </div>
+</div>
+
+<!-- Modal de Confirmación de Compra -->
+<div class="modal fade" id="purchaseConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="purchaseConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="purchaseConfirmationModalLabel"><i class="fas fa-check-circle"></i> Compra Exitosa</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>¡Gracias por tu compra! Aquí tienes un resumen de tu pedido:</p>
+                <ul id="purchaseSummary" class="list-group">
+                    <!-- Aquí se añadirán los productos comprados -->
+                </ul>
+                <p class="mt-3">Pronto recibirás un correo electrónico con los detalles de tu compra.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -53,19 +75,14 @@ function closeCart() {
 
 // Función para agregar al carrito y abrir el menú lateral explícitamente
 function addToCart(name, price, imageUrl) {
-    // Verificar si el producto ya está en el carrito
     const productIndex = cart.findIndex(item => item.name === name);
     if (productIndex !== -1) {
-        // Incrementar la cantidad si ya existe
         cart[productIndex].quantity += 1;
     } else {
-        // Agregar nuevo producto si no existe
         const product = { name, price, imageUrl, quantity: 1 };
         cart.push(product);
     }
     updateCart();
-
-    // Forzar el carrito a abrirse explícitamente
     document.getElementById('cartSidebar').classList.add('active');
 }
 
@@ -81,7 +98,6 @@ function updateCart() {
         subtotal += productTotal;
         totalProducts += productTotal;
 
-        // Renderizar los elementos del carrito
         cartItems.innerHTML += `
             <div class="cart-item">
                 <img src="${product.imageUrl}" alt="${product.name}">
@@ -99,7 +115,6 @@ function updateCart() {
         `;
     });
 
-    // Actualizar contadores y subtotal
     document.getElementById('productCount').textContent = cart.length;
     document.getElementById('totalProducts').textContent = totalProducts.toFixed(2);
     document.getElementById('subtotal').textContent = subtotal.toFixed(2);
@@ -108,7 +123,7 @@ function updateCart() {
 // Función para actualizar la cantidad de productos en el carrito
 function updateQuantity(index, amount) {
     cart[index].quantity += amount;
-    if (cart[index].quantity <= 0) cart.splice(index, 1); // Eliminar si cantidad es cero
+    if (cart[index].quantity <= 0) cart.splice(index, 1);
     updateCart();
 }
 
@@ -118,9 +133,19 @@ function removeFromCart(index) {
     updateCart();
 }
 
-// Función para finalizar la compra
+// Función para finalizar la compra y mostrar el modal
 function finalizePurchase() {
-    alert("¡Felicidades! Has realizado una compra exitosamente.");
+    const purchaseSummary = document.getElementById('purchaseSummary');
+    purchaseSummary.innerHTML = '';
+    cart.forEach(product => {
+        purchaseSummary.innerHTML += `
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                ${product.name} (x${product.quantity})
+                <span>$${(product.price * product.quantity).toFixed(2)}</span>
+            </li>
+        `;
+    });
+    $('#purchaseConfirmationModal').modal('show'); // Muestra el modal
     cart = [];
     updateCart();
     closeCart();

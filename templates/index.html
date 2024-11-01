@@ -11,25 +11,25 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body>
+<body style="background-color: #f5f5f5; color: #333;">
 
 <!-- Barra de Navegación -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="{{ url_for('index') }}"><i class="fas fa-laptop-code"></i> Tech Store</a>
+        <a class="navbar-brand font-weight-bold text-dark" href="{{ url_for('index') }}"><i class="fas fa-laptop-code"></i> Tech Store</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-home"></i> Inicio</a>
+                    <a class="nav-link text-dark" href="{{ url_for('index') }}"><i class="fas fa-home"></i> Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('products') }}"><i class="fas fa-box"></i> Productos</a>
+                    <a class="nav-link text-dark" href="{{ url_for('products') }}"><i class="fas fa-box"></i> Productos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('register') }}"><i class="fas fa-envelope"></i> Contacto</a>
+                    <a class="nav-link text-dark" href="{{ url_for('register') }}"><i class="fas fa-envelope"></i> Contacto</a>
                 </li>
             </ul>
         </div>
@@ -37,71 +37,65 @@
 </nav>
 
 <!-- Sección Hero -->
-<section class="hero bg-primary text-white text-center py-5">
+<section class="hero text-center py-5" style="background-color: #6c757d; color: #ffffff;">
     <div class="container">
         <h1 class="display-4 font-weight-bold">Bienvenido a Tech Store</h1>
         <p class="lead">Descubre los mejores productos de tecnología para satisfacer tus necesidades.</p>
-        <a href="{{ url_for('products') }}" class="btn btn-warning btn-lg mt-3 shadow-sm">Explora Productos</a>
+        <a href="{{ url_for('products') }}" class="btn btn-outline-light btn-lg mt-3 shadow-sm">Explora Productos</a>
     </div>
 </section>
 
 <!-- Productos Destacados -->
-<section class="featured-products py-5">
+<section class="featured-products py-5" style="background-color: #e9ecef;">
     <div class="container">
-        <h2 class="text-center mb-5 font-weight-bold">Producto Más Vendido</h2>
+        <h2 class="text-center mb-5 font-weight-bold text-secondary">Producto Destacado</h2>
         <div class="row justify-content-center">
+            {% if featured_product %}
             <div class="col-md-4 mb-4">
-                <div class="card shadow-sm h-100">
-                    <img src="https://www.enter.co/wp-content/uploads/2020/09/4zu3_Asus_Zephyrus_Duo_15_GX550LXS-1200x900.jpg" class="card-img-top product-image" alt="Imagen del producto destacado">
+                <div class="card border-0 shadow h-100">
+                    <img src="{{ featured_product.image_url }}" class="card-img-top product-image" alt="Imagen del producto destacado" style="border-top-left-radius: 8px; border-top-right-radius: 8px;">
                     <div class="card-body text-center d-flex flex-column">
-                        <h5 class="card-title">Producto 1</h5>
-                        <p class="card-text">$199.99</p>
-                        <a href="#" class="btn btn-primary mt-auto">Agregar al Carrito</a>
+                        <h5 class="card-title font-weight-bold text-dark">{{ featured_product.name }}</h5>
+                        <p class="card-text text-muted">{{ featured_product.description | truncatewords(20) }}</p>
+                        <p class="card-text text-primary font-weight-bold">Precio: ${{ featured_product.price }}</p>
+
                     </div>
                 </div>
             </div>
+            {% else %}
+            <p class="text-center text-muted">No hay productos destacados disponibles en este momento.</p>
+            {% endif %}
         </div>
     </div>
 </section>
 
 <!-- Testimonios -->
-<section class="testimonials bg-light py-5">
+<section class="testimonials py-5" style="background-color: #f1f3f5;">
     <div class="container">
-        <h2 class="text-center mb-5 font-weight-bold">Testimonios de Clientes</h2>
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="testimonial bg-white p-4 text-center shadow-sm rounded">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1MWm4Uc-yhWB5bkRg8r_Vy6ueABFtDb_qSA&s" alt="Perfil de Juan Pérez" class="rounded-circle mb-3" style="width: 60px; height: 60px;">
-                    <i class="fas fa-quote-left fa-2x text-primary mb-3"></i>
-                    <p>"Excelente servicio y productos de calidad. Muy recomendado!"</p>
-                    <h5 class="mt-3 font-weight-bold">Juan Pérez</h5>
+        <h2 class="text-center mb-5 font-weight-bold text-secondary">Testimonios de Clientes</h2>
+        <div class="row justify-content-center">
+            {% for customer in customers %}
+            <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <img src="{{ customer.imagen_url }}" class="rounded-circle mb-3" alt="Perfil de {{ customer.name }}" style="width: 60px; height: 60px; object-fit: cover;">
+                        <i class="fas fa-quote-left fa-2x text-secondary mb-3"></i>
+                        <p class="card-text">"Excelente servicio y productos de calidad. Muy recomendado!"</p>
+                        <h5 class="mt-3 font-weight-bold text-dark">{{ customer.name }}</h5>
+                        <p class="text-muted">{{ customer.email }}</p>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="testimonial bg-white p-4 text-center shadow-sm rounded">
-                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRlJ4ZwNR5h_VyPNDygNN7JhWkqdoiL3I-QJ6c6k-xo7PiAKo5u" alt="Perfil de María García" class="rounded-circle mb-3" style="width: 60px; height: 60px;">
-                    <i class="fas fa-quote-left fa-2x text-primary mb-3"></i>
-                    <p>"Gran variedad de productos y excelente atención al cliente."</p>
-                    <h5 class="mt-3 font-weight-bold">María García</h5>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="testimonial bg-white p-4 text-center shadow-sm rounded">
-                    <img src="data:image/jpeg;base64,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" alt="Perfil de Carlos Ruiz" class="rounded-circle mb-3" style="width: 60px; height: 60px;">
-                    <i class="fas fa-quote-left fa-2x text-primary mb-3"></i>
-                    <p>"Los precios son competitivos y los productos de muy buena calidad."</p>
-                    <h5 class="mt-3 font-weight-bold">Carlos Ruiz</h5>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
 
 <!-- CTA - Llamado a la Acción -->
-<section class="cta bg-primary text-white text-center py-5">
+<section class="cta text-center py-5" style="background-color: #495057; color: #ffffff;">
     <div class="container">
         <h2 class="mb-3 font-weight-bold">¿Listo para explorar lo mejor de la tecnología?</h2>
-        <a href="{{ url_for('products') }}" class="btn btn-warning btn-lg shadow-sm">Compra Ahora</a>
+        <a href="{{ url_for('products') }}" class="btn btn-light btn-lg shadow-sm">Compra Ahora</a>
     </div>
 </section>
 
@@ -110,11 +104,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <h5 class="text-uppercase text-warning">Tech Store</h5>
+                <h5 class="text-uppercase text-secondary">Tech Store</h5>
                 <p>Tu tienda de tecnología en línea con productos de alta calidad y servicios excepcionales.</p>
             </div>
             <div class="col-md-2">
-                <h5 class="text-uppercase text-warning">Enlaces</h5>
+                <h5 class="text-uppercase text-secondary">Enlaces</h5>
                 <ul class="list-unstyled">
                     <li><a href="{{ url_for('index') }}" class="text-white">Inicio</a></li>
                     <li><a href="{{ url_for('products') }}" class="text-white">Productos</a></li>
@@ -122,7 +116,7 @@
                 </ul>
             </div>
             <div class="col-md-3 text-center">
-                <h5 class="text-uppercase text-warning">Síguenos</h5>
+                <h5 class="text-uppercase text-secondary">Síguenos</h5>
                 <a href="#" class="text-white mr-3"><i class="fab fa-facebook-f"></i></a>
                 <a href="#" class="text-white mr-3"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="text-white mr-3"><i class="fab fa-instagram"></i></a>
@@ -130,7 +124,7 @@
             </div>
             <div class="col-md-4 text-center">
                 <p>© 2024 Tech Store - Todos los derechos reservados.</p>
-                <button onclick="scrollToTop()" class="btn btn-outline-warning btn-sm"><i class="fas fa-arrow-up"></i> Volver Arriba</button>
+                <button onclick="scrollToTop()" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-up"></i> Volver Arriba</button>
             </div>
         </div>
     </div>

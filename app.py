@@ -8,6 +8,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+# Modelo para los productos
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -16,16 +17,15 @@ class Product(db.Model):
     stock = db.Column(db.Integer, nullable=False)
     image_url = db.Column(db.String(255), nullable=True)
 
-
+# Modelo para los clientes
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
+    imagen_url = db.Column(db.String(255))
 
-
-# Filtro personalizado para truncar palabras
+# Filtro para truncar palabras en Jinja
 def truncatewords(value, words=20):
-    """Trunca una cadena a un cierto número de palabras."""
     word_list = value.split()
     truncated = ' '.join(word_list[:words])
     if len(word_list) > words:
@@ -35,12 +35,12 @@ def truncatewords(value, words=20):
 # Registra el filtro en Jinja
 app.jinja_env.filters['truncatewords'] = truncatewords
 
-
-# Página principal (Home)
+# Página principal (Home) con clientes y producto destacado
 @app.route('/')
 def index():
-    return render_template('index.html')
-
+    customers = Customer.query.all()
+    featured_product = Product.query.first()  # Selecciona el primer producto como destacado
+    return render_template('index.html', customers=customers, featured_product=featured_product)
 
 # Página de productos
 @app.route('/products')
@@ -48,6 +48,18 @@ def products():
     products = Product.query.all()
     return render_template('products.html', products=products)
 
+# Función de búsqueda de productos
+@app.route('/search', methods=['GET'])
+def search_products():
+    query = request.args.get('query', '')
+    if query:
+        products = Product.query.filter(
+            Product.name.ilike(f"%{query}%") |
+            Product.description.ilike(f"%{query}%")
+        ).all()
+    else:
+        products = Product.query.all()
+    return render_template('products.html', products=products)
 
 # Página de contacto / registro de clientes
 @app.route('/register', methods=['GET', 'POST'])
@@ -60,7 +72,6 @@ def register():
         db.session.commit()
         return redirect(url_for('index'))
     return render_template('register.html')
-
 
 if __name__ == '__main__':
     with app.app_context():

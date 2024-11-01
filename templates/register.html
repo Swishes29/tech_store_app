@@ -1,20 +1,62 @@
 {% extends "base.html" %}
-{% block title %}Contact Us - Tech Store{% endblock %}
+{% block title %}Contáctanos - Tech Store{% endblock %}
 {% block content %}
-<h2 class="text-center mb-4">Contact Us</h2>
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <form method="POST">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+
+<section class="contact-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-4 font-weight-bold">Ponte en Contacto con Nosotros</h2>
+        <p class="text-center text-muted mb-5">¡Nos encantaría saber de ti! Por favor, completa el formulario a continuación y te responderemos lo antes posible.</p>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <form method="POST" class="shadow-lg p-4 rounded">
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-user"></i> Nombre</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Tu Nombre Completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="ejemplo@dominio.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject"><i class="fas fa-tag"></i> Asunto</label>
+                        <input type="text" class="form-control" id="subject" name="subject" placeholder="Asunto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message"><i class="fas fa-comments"></i> Mensaje</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block mt-4 py-2 shadow-sm"><i class="fas fa-paper-plane"></i> Enviar Mensaje</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Submit</button>
-        </form>
+        </div>
     </div>
-</div>
+</section>
+
+<style>
+    .contact-section {
+        background: #f9f9f9;
+    }
+    .contact-section h2 {
+        color: #333;
+    }
+    .contact-section .form-control {
+        border-radius: 0.25rem;
+        padding: 0.75rem;
+    }
+    .contact-section .form-group label {
+        font-weight: 600;
+        color: #555;
+    }
+    .contact-section .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        font-size: 1.1rem;
+    }
+    .contact-section .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+</style>
+
 {% endblock %}
